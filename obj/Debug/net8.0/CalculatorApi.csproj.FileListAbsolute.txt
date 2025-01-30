@@ -207,3 +207,4 @@ C:\DuarteProject\CalculatorApi\bin\Debug\net8.0\MassTransit.ExtensionsDependency
 C:\DuarteProject\CalculatorApi\bin\Debug\net8.0\MassTransit.RabbitMqTransport.dll
 C:\DuarteProject\CalculatorApi\bin\Debug\net8.0\NewId.dll
 C:\DuarteProject\CalculatorApi\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+C:\DuarteProject\CalculatorApi\obj\Debug\net8.0\CalculatorApi.sourcelink.json

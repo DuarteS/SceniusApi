@@ -9,15 +9,18 @@ namespace CalculatorApi.Services
     public class CalculationService
     {
         private readonly IRepository<Calculation> _calculationRepository;
+        private readonly RabbitMQService _rabbitMQService;
 
-        public CalculationService(IRepository<Calculation> calculationRepository)
+        public CalculationService(IRepository<Calculation> calculationRepository, RabbitMQService rabbitMQService)
         {
             _calculationRepository = calculationRepository;
+            _rabbitMQService = rabbitMQService;
         }
 
         public async Task CreateCalculationAsync(Calculation calculation)
         {
             await _calculationRepository.CreateAsync(calculation);
+            _rabbitMQService.SendMessage($"Calculation created: {calculation.Id}");
         }
 
         public async Task<IReadOnlyCollection<Calculation>> GetAllCalculationsAsync()
