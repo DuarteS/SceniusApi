@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace CalculatorApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,10 +15,9 @@ namespace CalculatorApi.Migrations
                 name: "Calculations",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Expression = table.Column<string>(type: "TEXT", nullable: false),
-                    Result = table.Column<double>(type: "REAL", nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Expression = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Result = table.Column<double>(type: "float", nullable: true)
                 },
                 constraints: table =>
                 {

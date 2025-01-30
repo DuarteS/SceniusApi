@@ -39,7 +39,7 @@ namespace CalculatorApi
             });
 
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlite("Data Source=calculations.db"));
+    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IRepository<Calculation>, CalculationRepository>();
             services.AddSingleton<RabbitMQService>();
             services.AddScoped<RabbitMQConsumerService>();

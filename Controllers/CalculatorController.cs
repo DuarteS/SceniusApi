@@ -26,7 +26,7 @@ namespace CalculatorApi.Controllers
         {
             var message = JsonSerializer.Serialize<Calculation>(calculation);
             _rabbitMQService.SendMessage(message);
-            await _calculationService.CreateCalculationAsync(calculation);
+            //await _calculationService.CreateCalculationAsync(calculation);
             return Ok();
         }
 

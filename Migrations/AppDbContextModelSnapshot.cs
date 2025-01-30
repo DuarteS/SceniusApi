@@ -37,7 +37,7 @@ namespace CalculatorApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Calculations", (string)null);
+                    b.ToTable("Calculations");
                 });
 #pragma warning restore 612, 618
         }

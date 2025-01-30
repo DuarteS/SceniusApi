@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CalculatorApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250130233330_update")]
-    partial class update
+    [Migration("20250130234504_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
