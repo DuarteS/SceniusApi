@@ -24,6 +24,3 @@ namespace CalculatorApi
                 });
     }
 }
-
-// builder.Services.AddDbContext<AppDbContext>(options =>
-//     options.UseSqlite("Data Source=calculator.db"));

@@ -40,7 +40,6 @@ namespace CalculatorApi.Services
                 if (calculation != null)
                 {
                     calculation.Result = EvaluateExpression(calculation.Expression);
-                    calculation.Id = Guid.NewGuid();
                     _calculationService.CreateCalculationAsync(calculation).Wait();
                 }
 
