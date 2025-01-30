@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CalculatorApi.Models;
 using CalculatorApi.Services;
+using System.Text.Json;
 
 namespace CalculatorApi.Controllers
 {
@@ -11,18 +12,22 @@ namespace CalculatorApi.Controllers
     [Route("api/[controller]")]
     public class CalculationController : ControllerBase
     {
+        private readonly RabbitMQService _rabbitMQService;
         private readonly CalculationService _calculationService;
 
-        public CalculationController(CalculationService calculationService)
+        public CalculationController(CalculationService calculationService, RabbitMQService rabbitMQService)
         {
             _calculationService = calculationService;
+            _rabbitMQService = rabbitMQService;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] Calculation calculation)
         {
+            var message = JsonSerializer.Serialize<Calculation>(calculation);
+            _rabbitMQService.SendMessage(message);
             await _calculationService.CreateCalculationAsync(calculation);
-            return CreatedAtAction(nameof(GetAsync), new { id = calculation.Id }, calculation);
+            return Ok();
         }
 
         [HttpGet]
@@ -30,36 +35,6 @@ namespace CalculatorApi.Controllers
         {
             var calculations = await _calculationService.GetAllCalculationsAsync();
             return Ok(calculations);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Calculation>> GetAsync(Guid id)
-        {
-            var calculation = await _calculationService.GetCalculationByIdAsync(id);
-            if (calculation == null)
-            {
-                return NotFound();
-            }
-            return Ok(calculation);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] Calculation calculation)
-        {
-            if (id != calculation.Id)
-            {
-                return BadRequest();
-            }
-
-            await _calculationService.UpdateCalculationAsync(calculation);
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> RemoveAsync(Guid id)
-        {
-            await _calculationService.RemoveCalculationAsync(id);
-            return NoContent();
         }
     }
 }

@@ -13,8 +13,8 @@ namespace CalculatorApi.Services
             var factory = new ConnectionFactory() { HostName = "localhost" };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            _channel.QueueDeclare(queue: "calculations",
-                                 durable: false,
+            _channel.QueueDeclare(queue: "calculation",
+                                 durable: true,
                                  exclusive: false,
                                  autoDelete: false,
                                  arguments: null);
@@ -24,7 +24,7 @@ namespace CalculatorApi.Services
         {
             var body = Encoding.UTF8.GetBytes(message);
             _channel.BasicPublish(exchange: "",
-                                 routingKey: "calculations",
+                                 routingKey: "calculation",
                                  basicProperties: null,
                                  body: body);
         }

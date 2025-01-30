@@ -11,13 +11,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 namespace CalculatorApi
 {
     public class Startup
     {
-        private ServiceSettings serviceSettings;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,7 +28,6 @@ namespace CalculatorApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            serviceSettings = Configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
 
             services.AddCors(options =>
             {
@@ -43,6 +42,7 @@ namespace CalculatorApi
                 options.UseSqlite("Data Source=calculations.db"));
             services.AddScoped<IRepository<Calculation>, CalculationRepository>();
             services.AddSingleton<RabbitMQService>();
+            services.AddScoped<RabbitMQConsumerService>();
             services.AddScoped<CalculationService>();
 
             services.AddMassTransit(x =>
@@ -66,7 +66,7 @@ namespace CalculatorApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RabbitMQConsumerService rabbitMQConsumerService)
         {
             if (env.IsDevelopment())
             {
@@ -74,6 +74,8 @@ namespace CalculatorApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api v1"));
             }
+
+            rabbitMQConsumerService.StartConsuming();
 
             app.UseHttpsRedirection();
 
@@ -87,6 +89,8 @@ namespace CalculatorApi
             {
                 endpoints.MapControllers();
             });
+
+
         }
     }
 }
